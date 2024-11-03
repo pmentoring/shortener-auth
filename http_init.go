@@ -2,11 +2,12 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"goapp-skeleton/database"
-	"goapp-skeleton/internal/common"
-	"goapp-skeleton/internal/routing"
+	"google.golang.org/grpc"
 	"log/slog"
 	"os"
+	"shortener-auth/database"
+	"shortener-auth/internal/common"
+	"shortener-auth/internal/routing"
 )
 
 func main() {

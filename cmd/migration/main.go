@@ -7,8 +7,8 @@ import (
 	"github.com/pressly/goose/v3"
 	"log"
 	"os"
-	"shortener-smile/database"
-	_ "shortener-smile/migration"
+	"shortener-auth/database"
+	_ "shortener-auth/migration"
 )
 
 var (

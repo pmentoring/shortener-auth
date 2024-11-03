@@ -1,13 +1,13 @@
 version: "3.8"
 
 services:
-  goapp:
+  goauth:
     build:
       context: .
       target: go-dev
-    container_name: goapp
+    container_name: goauth
     ports:
-      - 8000:8000
+      - 8001:8000
     volumes:
       - .:/app
     env_file: ".env"

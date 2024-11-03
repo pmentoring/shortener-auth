@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/assert/v2"
-	"goapp-skeleton/database"
-	"goapp-skeleton/internal/common"
-	"goapp-skeleton/internal/routing"
 	"net/http"
 	"net/http/httptest"
+	"shortener-auth/database"
+	"shortener-auth/internal/common"
+	"shortener-auth/internal/routing"
 	"testing"
 )
 
