@@ -21,7 +21,5 @@ func GetConnection() (*sql.DB, error) {
 
 	fmt.Println(psqlInfo)
 
-	//return goose.OpenDBWithDriver("postgres", psqlInfo)
-
 	return sql.Open("postgres", psqlInfo)
 }
