@@ -6,28 +6,18 @@ import (
 	"github.com/go-playground/assert/v2"
 	"net/http"
 	"net/http/httptest"
-	"shortener-auth/database"
-	"shortener-auth/internal/common"
 	"shortener-auth/internal/routing"
 	"testing"
 )
 
-func TestShortenUrl(t *testing.T) {
-	db, err := database.GetConnection()
-	if err != nil {
-		return
-	}
-
+func TestHealthCheck(t *testing.T) {
 	router := gin.Default()
 
-	routing.Register(router, db, &common.ApplicationContext{
-		InstanceId: "01",
-		AppBaseUrl: "http://localhost:8000/",
-	})
+	routing.Register(router)
 
 	w := httptest.NewRecorder()
 
-	req, _ := http.NewRequest(http.MethodGet, "/heathcheck", nil)
+	req, _ := http.NewRequest(http.MethodGet, "/healthcheck", nil)
 
 	router.ServeHTTP(w, req)
 
