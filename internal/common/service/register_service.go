@@ -6,10 +6,10 @@ import (
 )
 
 type RegisterService struct {
-	repo repository.RegisterRepository
+	repo repository.UserRepository
 }
 
-func NewRegisterService(repo repository.RegisterRepository) *RegisterService {
+func NewRegisterService(repo repository.UserRepository) *RegisterService {
 	return &RegisterService{
 		repo: repo,
 	}

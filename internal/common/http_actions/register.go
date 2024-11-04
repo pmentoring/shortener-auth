@@ -15,10 +15,11 @@ type RegisterAction struct {
 }
 
 func NewRegisterAction(db *sql.DB, ctx *common.ApplicationContext) *RegisterAction {
+	repo := repository.NewUserRepository(db)
 	return &RegisterAction{
-		registerService: service.NewRegisterService(repository.NewRegisterRepository(db)),
+		registerService: service.NewRegisterService(repo),
 		loginService: service.NewLoginService(
-			repository.NewLoginRepository(db),
+			repo,
 			service.NewJWTService(ctx.SecretKey),
 		),
 	}

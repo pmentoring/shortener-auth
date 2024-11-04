@@ -6,7 +6,7 @@ import (
 )
 
 type LoginService struct {
-	repo       repository.LoginRepository
+	repo       repository.UserRepository
 	jwtService *JWTService
 }
 
@@ -24,7 +24,7 @@ func (l LoginService) Login(login string, password string) (string, error) {
 }
 
 func NewLoginService(
-	repo repository.LoginRepository,
+	repo repository.UserRepository,
 	jwtService *JWTService,
 ) *LoginService {
 	return &LoginService{
