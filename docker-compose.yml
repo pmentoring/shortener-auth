@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   goauth:
     build:
@@ -17,7 +15,7 @@ services:
   postgres:
     image: postgres:14-alpine
     ports:
-      - 5432:5432
+      - ${POSTGRES_PORT}:5432
     volumes:
       - db-data:/var/lib/postgresql/data
     networks:
