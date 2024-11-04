@@ -24,8 +24,9 @@ func TestRegisterOk(t *testing.T) {
 		return
 	}
 
-	ctx := common.NewApplicationContext("1", "", "trololo")
-	routing.Register(router, db, ctx)
+	ctx := common.NewApplicationContext("1", "", "secret")
+	registerAction := http_actions.NewRegisterAction(db, ctx)
+	routing.Register(router, registerAction)
 
 	w := httptest.NewRecorder()
 	request := http_actions.RegisterRequest{
@@ -69,8 +70,9 @@ func TestRegisterBadRequest(t *testing.T) {
 		return
 	}
 
-	ctx := common.NewApplicationContext("1", "", "trololo")
-	routing.Register(router, db, ctx)
+	ctx := common.NewApplicationContext("1", "", "secret")
+	registerAction := http_actions.NewRegisterAction(db, ctx)
+	routing.Register(router, registerAction)
 
 	w := httptest.NewRecorder()
 	request := http_actions.RegisterRequest{

@@ -7,6 +7,7 @@ import (
 	"os"
 	"shortener-auth/database"
 	"shortener-auth/internal/common"
+	appactions "shortener-auth/internal/common/http_actions"
 	"shortener-auth/internal/routing"
 )
 
@@ -23,7 +24,9 @@ func main() {
 		panic(err)
 	}
 
-	routing.Register(r, conn, getAppContext())
+	registerAction := appactions.NewRegisterAction(conn, getAppContext())
+
+	routing.Register(r, registerAction)
 
 	err = r.Run("0.0.0.0:8000")
 
