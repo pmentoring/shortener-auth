@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"google.golang.org/grpc"
+	_ "google.golang.org/grpc"
 	"log/slog"
 	"os"
 	"shortener-auth/database"
@@ -34,7 +34,7 @@ func main() {
 }
 
 func getAppContext() *common.ApplicationContext {
-	return common.NewApplicationContext(os.Getenv("INSTANCE_ID"), os.Getenv("APP_BASE_URL"))
+	return common.NewApplicationContext(os.Getenv("INSTANCE_ID"), os.Getenv("APP_BASE_URL"), os.Getenv("APP_SECRET"))
 }
 
 func createLogger() *slog.Logger {

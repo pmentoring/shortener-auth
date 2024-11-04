@@ -1,14 +1,27 @@
 package http_actions
 
 import (
-	"fmt"
+	"database/sql"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"shortener-auth/internal/common"
+	"shortener-auth/internal/common/repository"
 	"shortener-auth/internal/common/service"
 )
 
 type RegisterAction struct {
 	registerService *service.RegisterService
+	loginService    *service.LoginService
+}
+
+func NewRegisterAction(db *sql.DB, ctx *common.ApplicationContext) *RegisterAction {
+	return &RegisterAction{
+		registerService: service.NewRegisterService(repository.NewRegisterRepository(db)),
+		loginService: service.NewLoginService(
+			repository.NewLoginRepository(db),
+			service.NewJWTService(ctx.SecretKey),
+		),
+	}
 }
 
 type RegisterRequest struct {
@@ -19,16 +32,23 @@ type RegisterRequest struct {
 func (a RegisterAction) HandleRegister(context *gin.Context) {
 	var registerRequest RegisterRequest
 
-	if err := context.ShouldBind(&registerRequest); err != nil {
+	err := context.ShouldBind(&registerRequest)
+	if err != nil {
 		context.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
 		return
 	}
 
-	token, err := a.registerService.Register(registerRequest.Login, registerRequest.Password)
+	err = a.registerService.Register(registerRequest.Login, registerRequest.Password)
 
 	if err != nil {
-		fmt.Println(err)
-		context.JSON(400, gin.H{"error": "error while saving shorten url"})
+		context.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	token, err := a.loginService.Login(registerRequest.Login, registerRequest.Password)
+
+	if err != nil {
+		context.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 

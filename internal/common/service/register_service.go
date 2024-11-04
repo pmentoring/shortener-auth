@@ -15,18 +15,16 @@ func NewRegisterService(repo repository.RegisterRepository) *RegisterService {
 	}
 }
 
-func (r *RegisterService) Register(login, password string) (string, error) {
+func (r *RegisterService) Register(login, password string) error {
 	hashedPass, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	if err != nil {
-		return "", err
+		return err
 	}
 
 	err = r.repo.CreateUser(login, string(hashedPass))
 	if err != nil {
-		return "", err
+		return err
 	}
 
-	return "trololo", nil
-	// сгенерить жвт
-	// вернуть жвт
+	return nil
 }
