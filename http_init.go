@@ -8,6 +8,7 @@ import (
 	"shortener-auth/database"
 	"shortener-auth/internal/common"
 	appactions "shortener-auth/internal/common/http_actions"
+	"shortener-auth/internal/common/repository"
 	"shortener-auth/internal/routing"
 )
 
@@ -23,8 +24,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	repo := repository.NewUserRepository(conn)
 
-	registerAction := appactions.NewRegisterAction(conn, getAppContext())
+	registerAction := appactions.NewRegisterAction(repo, getAppContext())
 
 	routing.Register(r, registerAction)
 

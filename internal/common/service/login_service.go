@@ -10,7 +10,7 @@ type LoginService struct {
 	jwtService *JWTService
 }
 
-func (l LoginService) Login(login string, password string) (string, error) {
+func (l *LoginService) Login(login, password string) (string, error) {
 	user, err := l.repo.GetUserByLogin(login)
 	if err != nil {
 		return "", err

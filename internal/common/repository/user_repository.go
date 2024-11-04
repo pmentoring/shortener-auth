@@ -18,7 +18,7 @@ func NewUserRepository(conn *sql.DB) *UserRepositoryPostgresql {
 	return &UserRepositoryPostgresql{conn: conn}
 }
 
-func (r UserRepositoryPostgresql) getNextId() (int, error) {
+func (r *UserRepositoryPostgresql) getNextId() (int, error) {
 	result := r.conn.QueryRow("SELECT nextval(pg_get_serial_sequence('user', 'id'))")
 
 	var nextId int
@@ -31,7 +31,7 @@ func (r UserRepositoryPostgresql) getNextId() (int, error) {
 	return nextId, nil
 }
 
-func (r UserRepositoryPostgresql) CreateUser(login, password string) error {
+func (r *UserRepositoryPostgresql) CreateUser(login, password string) error {
 	id, err := r.getNextId()
 
 	if err != nil {
@@ -51,7 +51,7 @@ func (r UserRepositoryPostgresql) CreateUser(login, password string) error {
 	return nil
 }
 
-func (r UserRepositoryPostgresql) GetUserByLogin(login string) (*model.User, error) {
+func (r *UserRepositoryPostgresql) GetUserByLogin(login string) (*model.User, error) {
 	row := r.conn.QueryRow(`SELECT * FROM public.user WHERE login = $1`, login)
 
 	err := row.Err()

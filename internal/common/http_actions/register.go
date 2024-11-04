@@ -1,7 +1,6 @@
 package http_actions
 
 import (
-	"database/sql"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"shortener-auth/internal/common"
@@ -14,8 +13,7 @@ type RegisterAction struct {
 	loginService    *service.LoginService
 }
 
-func NewRegisterAction(db *sql.DB, ctx *common.ApplicationContext) *RegisterAction {
-	repo := repository.NewUserRepository(db)
+func NewRegisterAction(repo repository.UserRepository, ctx *common.ApplicationContext) *RegisterAction {
 	return &RegisterAction{
 		registerService: service.NewRegisterService(repo),
 		loginService: service.NewLoginService(
