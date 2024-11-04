@@ -16,7 +16,7 @@ import (
 	"testing"
 )
 
-func TestRegister(t *testing.T) {
+func TestRegisterOk(t *testing.T) {
 	// arrange
 	router := gin.Default()
 	db, err := database.GetConnection()
@@ -54,7 +54,38 @@ func TestRegister(t *testing.T) {
 
 	require.NoError(t, err, "Failed to parse JWT token")
 	require.True(t, token.Valid, "Token should be valid")
-	require.Same(t, token.Claims.GetIssuer(), "enisey")
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	require.True(t, ok, "Should be able to get claims")
+
+	assert.Greater(t, claims["sub"], float64(0), "Subject should match")
+}
+
+func TestRegisterBadRequest(t *testing.T) {
+	// arrange
+	router := gin.Default()
+	db, err := database.GetConnection()
+	if err != nil {
+		return
+	}
+
+	ctx := common.NewApplicationContext("1", "", "trololo")
+	routing.Register(router, db, ctx)
+
+	w := httptest.NewRecorder()
+	request := http_actions.RegisterRequest{
+		Login: "enisey",
+	}
+	jsonBody, _ := json.Marshal(request)
+
+	req, _ := http.NewRequest(http.MethodPost, "/register", strings.NewReader(string(jsonBody)))
+	req.Header.Add("Content-Type", "application/json")
+
+	// act
+	router.ServeHTTP(w, req)
+
+	// assert
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 type Response struct {
