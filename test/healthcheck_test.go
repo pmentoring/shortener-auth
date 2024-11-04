@@ -1,36 +1,36 @@
 package test
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/assert/v2"
 	"net/http"
 	"net/http/httptest"
 	"shortener-auth/database"
 	"shortener-auth/internal/common"
+	"shortener-auth/internal/common/http_actions"
+	"shortener-auth/internal/common/repository"
 	"shortener-auth/internal/routing"
 	"testing"
 )
 
-func TestShortenUrl(t *testing.T) {
-	db, err := database.GetConnection()
+func TestHealthCheck(t *testing.T) {
+	router := gin.Default()
+
+	conn, err := database.GetConnection()
 	if err != nil {
 		return
 	}
 
-	router := gin.Default()
-
-	routing.Register(router, db, &common.ApplicationContext{
-		InstanceId: "01",
-		AppBaseUrl: "http://localhost:8000/",
-	})
+	ctx := common.NewApplicationContext("1", "", "secret")
+	repo := repository.NewUserRepository(conn)
+	registerAction := http_actions.NewRegisterAction(repo, ctx)
+	routing.Register(router, registerAction)
 
 	w := httptest.NewRecorder()
 
-	req, _ := http.NewRequest(http.MethodGet, "/heathcheck", nil)
+	req, _ := http.NewRequest(http.MethodGet, "/healthcheck", nil)
 
 	router.ServeHTTP(w, req)
 
-	fmt.Println(w.Body.String())
 	assert.Equal(t, http.StatusOK, w.Code)
 }

@@ -2,11 +2,13 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"google.golang.org/grpc"
+	_ "google.golang.org/grpc"
 	"log/slog"
 	"os"
 	"shortener-auth/database"
 	"shortener-auth/internal/common"
+	appactions "shortener-auth/internal/common/http_actions"
+	"shortener-auth/internal/common/repository"
 	"shortener-auth/internal/routing"
 )
 
@@ -22,8 +24,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	repo := repository.NewUserRepository(conn)
 
-	routing.Register(r, conn, getAppContext())
+	registerAction := appactions.NewRegisterAction(repo, getAppContext())
+
+	routing.Register(r, registerAction)
 
 	err = r.Run("0.0.0.0:8000")
 
@@ -34,7 +39,7 @@ func main() {
 }
 
 func getAppContext() *common.ApplicationContext {
-	return common.NewApplicationContext(os.Getenv("INSTANCE_ID"), os.Getenv("APP_BASE_URL"))
+	return common.NewApplicationContext(os.Getenv("INSTANCE_ID"), os.Getenv("APP_BASE_URL"), os.Getenv("APP_SECRET"))
 }
 
 func createLogger() *slog.Logger {

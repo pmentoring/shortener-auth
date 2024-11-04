@@ -31,8 +31,11 @@ make migration
 
 ## Auth
 register - get password and login (must be unique), create user, and return jwt with expires_at
+
 login - get password and login, return jwt with expires_at
+
 jwt renew - get jwt and create new one (difference is created_at field)
+
 jwt:
     fields:
         userId: int

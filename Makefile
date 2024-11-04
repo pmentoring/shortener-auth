@@ -1,3 +1,5 @@
+CONTAINER = goauth
+
 up:
 	docker compose up -d
 down:
@@ -7,11 +9,13 @@ down-v:
 build:
 	docker compose build --no-cache
 exec:
-	docker compose exec -it go-app bash
+	docker compose exec -it $(CONTAINER) bash
 build-goose:
-	docker compose exec -it go-app go build -o /app/goose-custom /app/cmd/migration/main.go
+	docker compose exec -it $(CONTAINER) go build -o /app/goose-custom /app/cmd/migration/main.go
 migrate: build-goose
-	docker compose exec -it go-app ./goose-custom /app/migration up
+	docker compose exec -it $(CONTAINER) ./goose-custom /app/migration up
 migration: build-goose
-	docker compose exec -it go-app goose create $(name) go -dir /app/migration
+	docker compose exec -it $(CONTAINER) goose create $(name) go -dir /app/migration
 init: up migrate
+tests:
+	docker compose exec -it $(CONTAINER) go test ./...

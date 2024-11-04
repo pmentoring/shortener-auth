@@ -6,9 +6,10 @@ type ApplicationContext struct {
 	SecretKey  string
 }
 
-func NewApplicationContext(instanceId, appBaseUrl string) *ApplicationContext {
+func NewApplicationContext(instanceId, appBaseUrl, secretKey string) *ApplicationContext {
 	return &ApplicationContext{
 		InstanceId: instanceId,
 		AppBaseUrl: appBaseUrl,
+		SecretKey:  secretKey,
 	}
 }

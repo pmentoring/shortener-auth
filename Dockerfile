@@ -1,8 +1,6 @@
 FROM golang:1.22 as go-base
 
-ENV PROJECT_DIR=/app \
-    GOOS=linux \
-    GOARCH=amd64
+ENV PROJECT_DIR=/app
 
 WORKDIR /app
 COPY . ./
