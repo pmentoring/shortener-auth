@@ -8,6 +8,7 @@ import (
 	"shortener-auth/database"
 	"shortener-auth/internal/common"
 	"shortener-auth/internal/common/http_actions"
+	"shortener-auth/internal/common/repository"
 	"shortener-auth/internal/routing"
 	"testing"
 )
@@ -15,13 +16,14 @@ import (
 func TestHealthCheck(t *testing.T) {
 	router := gin.Default()
 
-	db, err := database.GetConnection()
+	conn, err := database.GetConnection()
 	if err != nil {
 		return
 	}
 
 	ctx := common.NewApplicationContext("1", "", "secret")
-	registerAction := http_actions.NewRegisterAction(db, ctx)
+	repo := repository.NewUserRepository(conn)
+	registerAction := http_actions.NewRegisterAction(repo, ctx)
 	routing.Register(router, registerAction)
 
 	w := httptest.NewRecorder()
