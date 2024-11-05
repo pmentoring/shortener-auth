@@ -2,16 +2,19 @@ package test
 
 import (
 	"encoding/json"
+	"flag"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	pb "github.com/pmentoring/shortener-protoc/gen/go/shortener"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"net/http"
 	"net/http/httptest"
 	authactions "shortener-auth/auth/http_actions"
 	"shortener-auth/auth/repository"
 	"shortener-auth/database"
-	"shortener-auth/internal/app/grpc"
 	"shortener-auth/internal/common"
 	"shortener-auth/internal/routing"
 	"strings"
@@ -29,7 +32,17 @@ func TestRegisterOk(t *testing.T) {
 	ctx := common.NewApplicationContext("1", "", "secret")
 	repo := repository.NewUserRepository(conn)
 	registerAction := authactions.NewRegisterAction(repo, ctx)
-	grpcClient := grpc.NewGrpc()
+	flag.Parse()
+
+	var opts []grpc.DialOption
+	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	grpcConn, err := grpc.NewClient(*addr, opts...)
+	if err != nil {
+		panic(err)
+	}
+
+	grpcClient := pb.NewShortenerClient(grpcConn)
+
 	routing.Register(router, registerAction, grpcClient)
 
 	w := httptest.NewRecorder()
@@ -77,7 +90,17 @@ func TestRegisterBadRequest(t *testing.T) {
 	ctx := common.NewApplicationContext("1", "", "secret")
 	repo := repository.NewUserRepository(conn)
 	registerAction := authactions.NewRegisterAction(repo, ctx)
-	grpcClient := grpc.NewGrpc()
+	flag.Parse()
+
+	var opts []grpc.DialOption
+	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	grpcConn, err := grpc.NewClient(*addr, opts...)
+	if err != nil {
+		panic(err)
+	}
+
+	grpcClient := pb.NewShortenerClient(grpcConn)
+
 	routing.Register(router, registerAction, grpcClient)
 
 	w := httptest.NewRecorder()
