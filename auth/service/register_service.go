@@ -2,8 +2,10 @@ package service
 
 import (
 	"golang.org/x/crypto/bcrypt"
-	"shortener-auth/internal/common/repository"
+	"shortener-auth/auth/repository"
 )
+
+const DefaultRole = "ROLE_USER"
 
 type RegisterService struct {
 	repo repository.UserRepository
@@ -21,7 +23,7 @@ func (r *RegisterService) Register(login, password string) error {
 		return err
 	}
 
-	err = r.repo.CreateUser(login, string(hashedPass))
+	err = r.repo.CreateUser(login, string(hashedPass), DefaultRole)
 	if err != nil {
 		return err
 	}

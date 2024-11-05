@@ -5,10 +5,11 @@ import (
 	"github.com/go-playground/assert/v2"
 	"net/http"
 	"net/http/httptest"
+	authactions "shortener-auth/auth/http_actions"
+	"shortener-auth/auth/repository"
 	"shortener-auth/database"
+	"shortener-auth/internal/app/grpc"
 	"shortener-auth/internal/common"
-	"shortener-auth/internal/common/http_actions"
-	"shortener-auth/internal/common/repository"
 	"shortener-auth/internal/routing"
 	"testing"
 )
@@ -23,8 +24,9 @@ func TestHealthCheck(t *testing.T) {
 
 	ctx := common.NewApplicationContext("1", "", "secret")
 	repo := repository.NewUserRepository(conn)
-	registerAction := http_actions.NewRegisterAction(repo, ctx)
-	routing.Register(router, registerAction)
+	registerAction := authactions.NewRegisterAction(repo, ctx)
+	grpcClient := grpc.NewGrpc()
+	routing.Register(router, registerAction, grpcClient)
 
 	w := httptest.NewRecorder()
 

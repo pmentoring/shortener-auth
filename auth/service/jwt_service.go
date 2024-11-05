@@ -20,7 +20,7 @@ func NewJWTService(secret string) *JWTService {
 	return &JWTService{secretKey: secret}
 }
 
-func (s JWTService) CreateJwtForId(id int) (string, error) {
+func (s JWTService) Create(id int) (string, error) {
 	currTime := time.Now
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{

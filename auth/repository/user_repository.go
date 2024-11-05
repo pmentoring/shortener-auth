@@ -2,12 +2,12 @@ package repository
 
 import (
 	"database/sql"
-	"shortener-auth/internal/common/model"
+	"shortener-auth/auth/model"
 )
 
 type UserRepository interface {
 	GetUserByLogin(login string) (*model.User, error)
-	CreateUser(login, password string) error
+	CreateUser(login, password, role string) error
 }
 
 type UserRepositoryPostgresql struct {
@@ -31,13 +31,12 @@ func (r *UserRepositoryPostgresql) getNextId() (int, error) {
 	return nextId, nil
 }
 
-func (r *UserRepositoryPostgresql) CreateUser(login, password string) error {
+func (r *UserRepositoryPostgresql) CreateUser(login, password, role string) error {
 	id, err := r.getNextId()
 
 	if err != nil {
 		return err
 	}
-	role := "ROLE_USER"
 	_, err = r.conn.Exec(`
 		INSERT INTO "user" (id, login, password, role) VALUES ($1, $2, $3, $4);
 		`,

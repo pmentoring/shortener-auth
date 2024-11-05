@@ -2,7 +2,7 @@ package service
 
 import (
 	"golang.org/x/crypto/bcrypt"
-	"shortener-auth/internal/common/repository"
+	"shortener-auth/auth/repository"
 )
 
 type LoginService struct {
@@ -20,7 +20,7 @@ func (l *LoginService) Login(login, password string) (string, error) {
 		return "", err
 	}
 
-	return l.jwtService.CreateJwtForId(user.Id)
+	return l.jwtService.Create(user.Id)
 }
 
 func NewLoginService(
