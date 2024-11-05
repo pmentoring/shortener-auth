@@ -4,6 +4,7 @@ import (
 	"flag"
 	pb "github.com/pmentoring/shortener-protoc/gen/go/shortener"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 var (
@@ -14,6 +15,7 @@ func NewGrpc() pb.ShortenerClient {
 	flag.Parse()
 
 	var opts []grpc.DialOption
+	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	conn, err := grpc.NewClient(*addr, opts...)
 	if err != nil {
 		panic(err)

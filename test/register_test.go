@@ -11,6 +11,7 @@ import (
 	authactions "shortener-auth/auth/http_actions"
 	"shortener-auth/auth/repository"
 	"shortener-auth/database"
+	"shortener-auth/internal/app/grpc"
 	"shortener-auth/internal/common"
 	"shortener-auth/internal/routing"
 	"strings"
@@ -28,7 +29,8 @@ func TestRegisterOk(t *testing.T) {
 	ctx := common.NewApplicationContext("1", "", "secret")
 	repo := repository.NewUserRepository(conn)
 	registerAction := authactions.NewRegisterAction(repo, ctx)
-	routing.Register(router, registerAction)
+	grpcClient := grpc.NewGrpc()
+	routing.Register(router, registerAction, grpcClient)
 
 	w := httptest.NewRecorder()
 	request := authactions.RegisterRequest{
@@ -75,7 +77,8 @@ func TestRegisterBadRequest(t *testing.T) {
 	ctx := common.NewApplicationContext("1", "", "secret")
 	repo := repository.NewUserRepository(conn)
 	registerAction := authactions.NewRegisterAction(repo, ctx)
-	routing.Register(router, registerAction)
+	grpcClient := grpc.NewGrpc()
+	routing.Register(router, registerAction, grpcClient)
 
 	w := httptest.NewRecorder()
 	request := authactions.RegisterRequest{
