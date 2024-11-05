@@ -2,7 +2,7 @@ package service
 
 import (
 	"golang.org/x/crypto/bcrypt"
-	"shortener-auth/internal/common/repository"
+	"shortener-auth/auth/repository"
 )
 
 type LoginService struct {

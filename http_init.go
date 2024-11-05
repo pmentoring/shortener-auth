@@ -5,10 +5,10 @@ import (
 	_ "google.golang.org/grpc"
 	"log/slog"
 	"os"
+	"shortener-auth/auth/repository"
 	"shortener-auth/database"
 	"shortener-auth/internal/common"
 	appactions "shortener-auth/internal/common/http_actions"
-	"shortener-auth/internal/common/repository"
 	"shortener-auth/internal/routing"
 )
 

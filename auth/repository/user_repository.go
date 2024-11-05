@@ -2,7 +2,7 @@ package repository
 
 import (
 	"database/sql"
-	"shortener-auth/internal/common/model"
+	"shortener-auth/auth/model"
 )
 
 type UserRepository interface {

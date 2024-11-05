@@ -3,22 +3,22 @@ package http_actions
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"shortener-auth/auth/repository"
+	service2 "shortener-auth/auth/service"
 	"shortener-auth/internal/common"
-	"shortener-auth/internal/common/repository"
-	"shortener-auth/internal/common/service"
 )
 
 type RegisterAction struct {
-	registerService *service.RegisterService
-	loginService    *service.LoginService
+	registerService *service2.RegisterService
+	loginService    *service2.LoginService
 }
 
 func NewRegisterAction(repo repository.UserRepository, ctx *common.ApplicationContext) *RegisterAction {
 	return &RegisterAction{
-		registerService: service.NewRegisterService(repo),
-		loginService: service.NewLoginService(
+		registerService: service2.NewRegisterService(repo),
+		loginService: service2.NewLoginService(
 			repo,
-			service.NewJWTService(ctx.SecretKey),
+			service2.NewJWTService(ctx.SecretKey),
 		),
 	}
 }
