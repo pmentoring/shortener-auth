@@ -15,7 +15,7 @@ import (
 func main() {
 	logger := createLogger()
 
-	logger.Debug("Application booting...")
+	logger.Debug("Application booting....")
 
 	r := gin.Default()
 
