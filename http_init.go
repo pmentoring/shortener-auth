@@ -5,10 +5,10 @@ import (
 	_ "google.golang.org/grpc"
 	"log/slog"
 	"os"
+	authactions "shortener-auth/auth/http_actions"
 	"shortener-auth/auth/repository"
 	"shortener-auth/database"
 	"shortener-auth/internal/common"
-	appactions "shortener-auth/internal/common/http_actions"
 	"shortener-auth/internal/routing"
 )
 
@@ -26,7 +26,7 @@ func main() {
 	}
 	repo := repository.NewUserRepository(conn)
 
-	registerAction := appactions.NewRegisterAction(repo, getAppContext())
+	registerAction := authactions.NewRegisterAction(repo, getAppContext())
 
 	routing.Register(r, registerAction)
 
