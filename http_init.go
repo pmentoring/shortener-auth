@@ -2,12 +2,12 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	_ "google.golang.org/grpc"
 	"log/slog"
 	"os"
 	authactions "shortener-auth/auth/http_actions"
 	"shortener-auth/auth/repository"
 	"shortener-auth/database"
+	"shortener-auth/internal/app/grpc"
 	"shortener-auth/internal/common"
 	"shortener-auth/internal/routing"
 )
@@ -27,8 +27,8 @@ func main() {
 	repo := repository.NewUserRepository(conn)
 
 	registerAction := authactions.NewRegisterAction(repo, getAppContext())
-
-	routing.Register(r, registerAction)
+	grpcClient := grpc.NewGrpc()
+	routing.Register(r, registerAction, grpcClient)
 
 	err = r.Run("0.0.0.0:8000")
 
